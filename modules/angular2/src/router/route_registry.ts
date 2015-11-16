@@ -185,7 +185,7 @@ export class RouteRegistry {
   }
 
   /**
-   * Given a normalized list with component names and params like: `['user', {id: 3 }]`
+   * Given a normalized list with component names and params like: `['User', {id: 3 }]`
    * generates a url with a leading slash relative to the provided `parentComponent`.
    */
   generate(linkParams: any[], parentComponent: any): Instruction {
