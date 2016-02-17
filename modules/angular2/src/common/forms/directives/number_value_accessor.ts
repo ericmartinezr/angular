@@ -1,6 +1,6 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, Provider} from 'angular2/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from './control_value_accessor';
-import {isBlank, CONST_EXPR, NumberWrapper} from 'angular2/src/facade/lang';
+import {isBlank, CONST_EXPR, NumberWrapper, isNumber} from 'angular2/src/facade/lang';
 
 const NUMBER_VALUE_ACCESSOR = CONST_EXPR(new Provider(
     NG_VALUE_ACCESSOR, {useExisting: forwardRef(() => NumberValueAccessor), multi: true}));
@@ -31,11 +31,11 @@ export class NumberValueAccessor implements ControlValueAccessor {
   constructor(private _renderer: Renderer, private _elementRef: ElementRef) {}
 
   writeValue(value: number): void {
-    this._renderer.setElementProperty(this._elementRef.nativeElement, 'value', value);
+      this._renderer.setElementProperty(this._elementRef.nativeElement, 'value', value);
   }
 
   registerOnChange(fn: (_: number) => void): void {
-    this.onChange = (value) => { fn(NumberWrapper.parseFloat(value)); };
+    this.onChange = (value) => { if(isNumber(value)) { fn(NumberWrapper.parseFloat(value)); } };
   }
   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

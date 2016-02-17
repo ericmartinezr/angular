@@ -586,6 +586,28 @@ export function main() {
 
                   expect(form.valid).toEqual(true);
                 })));
+
+      it("should mark as invalid an input=number when pass an empty string using Validators.required",
+         inject([TestComponentBuilder], fakeAsync((tcb: TestComponentBuilder) => {
+                  var control = new Control("", Validators.required);
+                  var form = new ControlGroup({"mynumber": control});
+
+                  var t = `<div [ngFormModel]="form">
+                  <input type="number" ngControl="mynumber">
+                 </div>`;
+
+                  var fixture;
+                  tcb.overrideTemplate(MyComp, t).createAsync(MyComp).then((root) => fixture =
+                                                                               root);
+                  tick();
+
+                  fixture.debugElement.componentInstance.form = form;
+                  fixture.detectChanges();
+
+                  expect(form.hasError("required", ["mynumber"])).toEqual(true);
+
+                })));
+
     });
 
     describe("nested forms", () => {
