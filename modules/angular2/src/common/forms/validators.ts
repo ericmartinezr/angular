@@ -90,6 +90,28 @@ export class Validators {
   }
 
   /**
+   * Validator that requires control to have a minimum value
+   */
+  static min(min: number): ValidatorFn {
+  	return (control: modelModule.AbstractControl) : {[key: string]: any} => {
+  		if(isPresent(Validators.required(control))) return null;
+  		let value : number = control.value;
+  		return value < min ? {"min" : {"minValue" : min, "actualValue" : value}} : null;
+  	};
+  }
+
+  /**
+   * Validator that requires control to have a maximum value
+   */
+  static max(max: number): ValidatorFn {
+  	return (control: modelModule.AbstractControl) : {[key: string]: any} => {
+  		if(isPresent(Validators.required(control))) return null;
+  		let value: number = control.value;
+  		return value > max ? {"max" : {"maxValue":max, "actualValue" : value}} : null;
+  	};
+  }
+
+  /**
    * No-op validator.
    */
   static nullValidator(c: modelModule.AbstractControl): {[key: string]: boolean} { return null; }

@@ -88,6 +88,28 @@ export function main() {
       });
     });
 
+    describe("min", () => {
+      it("should not error when value is higher than minimum value", () => {
+        expect(Validators.min(0)(new Control(1))).toEqual(null);
+      });
+
+      it("should error when control value is less than the specified", () => {
+         expect(Validators.min(0)(new Control(-1)))
+           .toEqual({"min": {"minValue":0, "actualValue": -1}});
+      });
+    });
+
+    describe("max", () => {
+      it("should not error when value is lower than maximum value", () => {
+        expect(Validators.max(10)(new Control(5))).toEqual(null);
+      });
+
+      it("should error when control value is higher than the specified", () => {
+         expect(Validators.max(5)(new Control(6)))
+           .toEqual({"max": {"maxValue":5, "actualValue": 6}});
+      });
+    });
+
     describe("compose", () => {
       it("should return null when given null",
          () => { expect(Validators.compose(null)).toBe(null); });

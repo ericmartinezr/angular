@@ -135,3 +135,57 @@ export class PatternValidator implements Validator {
 
   validate(c: AbstractControl): {[key: string]: any} { return this._validator(c); }
 }
+
+
+/**
+ * A directive that adds `min` validator to any control marked with `min` attribute.
+ *
+ * ### Example 
+ *
+ * ```
+ * <input type="number" ngControl="myNumber" min="1" >
+ * ```
+ */
+const MIN_VALIDATOR = CONST_EXPR(
+  new Provider(NG_VALIDATORS, {useExisting: forwardRef(() => MinValidator), multi: true}));
+
+@Directive({
+  selector : 'input[type=number][min][ngControl],input[type=number][min][ngFormControl],input[type=number][min][ngModel]',
+  providers : [MIN_VALIDATOR]
+})
+export class MinValidator implements Validator {
+  private _validator: ValidatorFn;
+
+  constructor(@Attribute("min") min: number) {
+    this._validator = Validators.min(min);
+  }
+
+  validate(c: AbstractControl): {[key: string]: any} { return this._validator(c); }
+}
+
+
+/**
+ * A directive that adds `max` validator to any control marked with `max` attribute.
+ *
+ * ### Example 
+ *
+ * ```
+ * <input type="number" ngControl="myNumber" max="15" >
+ * ```
+ */
+const MAX_VALIDATOR = CONST_EXPR(
+  new Provider(NG_VALIDATORS, {useExisting: forwardRef(() => MaxValidator), multi: true}));
+
+@Directive({
+  selector : 'input[type=number][max][ngControl],input[type=number][max][ngFormControl],input[type=number][max][ngModel]',
+  providers : [MAX_VALIDATOR]
+})
+export class MaxValidator implements Validator {
+  private _validator: ValidatorFn;
+
+  constructor(@Attribute("max") max: number) {
+    this._validator = Validators.max(max);
+  }
+
+  validate(c: AbstractControl): {[key: string]: any} { return this._validator(c); }
+}
