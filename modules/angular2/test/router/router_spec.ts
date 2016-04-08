@@ -93,6 +93,22 @@ export function main() {
              });
        }));
 
+    it('should throw when navigating via DSL not using an array',
+       inject([AsyncTestCompleter], (async) => {
+         var outlet = makeDummyOutlet();
+
+         PromiseWrapper.catchError(
+             router.registerPrimaryOutlet(outlet)
+                 .then((_) => router.config(
+                           [new Route({path: '/a', component: DummyComponent, name: 'A'})]))
+                 .then((_) => router.navigate(<any>'/A')),
+             (e) => {
+               expect(e.message).toContain(`The Router DSL is expected to be an array.`);
+               async.done();
+               return null;
+             });
+       }));
+
     it('should not push a history change on when navigate is called with skipUrlChange',
        inject([AsyncTestCompleter], (async) => {
          var outlet = makeDummyOutlet();

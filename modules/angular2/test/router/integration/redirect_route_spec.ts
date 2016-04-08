@@ -15,6 +15,8 @@ import {
   xit
 } from 'angular2/testing_internal';
 
+import {PromiseWrapper} from 'angular2/src/facade/promise';
+
 import {Router, RouterOutlet, RouterLink, RouteParams, RouteData, Location} from 'angular2/router';
 import {
   RouteConfig,
@@ -134,6 +136,21 @@ export function main() {
                expect(rootTC.debugElement.nativeElement).toHaveText('goodbye');
                expect(location.urlChanges).toEqual(['/bye']);
                async.done();
+             });
+       }));
+
+    it('should throw when redirectTo property is not an array',
+       inject([AsyncTestCompleter], (async) => {
+         compile(tcb)
+             .then((rtc) => {rootTC = rtc})
+             .then((_) => {
+               PromiseWrapper.catchError(
+                   rtr.config([new Redirect({path: '/', redirectTo:<any>'/Hello'})]), (e) => {
+                     expect(e.message).toContain(`The Router DSL is expected to be an array.`);
+                     async.done();
+                     return null;
+                   });
+
              });
        }));
   });

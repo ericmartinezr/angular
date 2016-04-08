@@ -488,6 +488,9 @@ export class RouteRegistry {
  */
 function splitAndFlattenLinkParams(linkParams: any[]) {
   var accumulation = [];
+  if (!isArray(<any>linkParams)) {
+    throw new BaseException(`The Router DSL is expected to be an array.`);
+  }
   linkParams.forEach(function(item: any) {
     if (isString(item)) {
       var strItem: string = <string>item;

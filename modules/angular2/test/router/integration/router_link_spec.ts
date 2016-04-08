@@ -231,6 +231,19 @@ export function main() {
        }));
 
 
+    it('should throw a readable error message when RouterLink is not an array',
+       inject([AsyncTestCompleter], (async) => {
+         PromiseWrapper.catchError(compile(`<a href="hello" [routerLink]="'/Hello'">dummy link</a>`)
+                                       .then((_) => fixture.detectChanges()),
+                                   (e) => {
+                                     expect(e.message)
+                                         .toContain(`The Router DSL is expected to be an array.`);
+                                     async.done();
+                                     return null;
+                                   });
+       }));
+
+
     describe('router-link-active CSS class', () => {
       it('should be added to the associated element', inject([AsyncTestCompleter], (async) => {
            router.config([
